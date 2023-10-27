@@ -1,23 +1,30 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <limits>
 
 using namespace std;
 
-string acceptInputString(); //Accept string input from user
+string acceptInput(); //Accept string input from user
+int acceptInput(string flag); // Accept int number input from user
 
 bool checkInput(string inputData); // Check string is valid or not
+bool checkInput(int inputData, string flag); // Check int is valid or not base on criteria flag
 
+void clearScreen(); // Clear the Terminal or Command Prompt;
 
 int main() {
-
-
+    Clear();
+    cout << "Enter hours";
+    acceptInput("hours-flag");
+    cout << "Enter miniutes";
+    acceptInput("minutes-flag");
     return 0;
 }
 
+//Accept Input functions
 
-
-string acceptInputString() {
+string acceptInput() {
     bool validInput = false;
     string userInput;
 
@@ -25,26 +32,70 @@ string acceptInputString() {
         // Looping until user enter the vaild input string
         cout << "Enter 'Yes' or 'No': ";
         cin >> userInput;
+        clearScreen();
 
-            validInput = checkInput(userInput);
+        validInput = checkInput(userInput);
 
     } while (!validInput);
 
     return userInput; 
 }
+int acceptInput(string flag) {
+    bool validInput = false;
+    int userInput;
 
+    cout << "Enter Parking duration in format of Hours and minutes\n" << endl;
+
+    cout << "Hours format - duration (1 hour to 24 hours)\n";
+    cout << "If the duration is less than one hour, please enter zero(0)\n" << endl;
+
+    cout << "Minutes format - duration (1 minute to 60 minutes)\n";
+    cout << "If the duration is less than one minutes, please enter zero(0)\n" << endl;
+
+    do {
+        // Looping until user enter the vaild input string
+        if (flag == "hours-flag") {
+            cout << "Enter parking hours: ";
+            cin >> userInput;
+            clearScreen();
+        }
+        else if (flag == "minutes-flag") {
+            cout << "Enter parking minutes: ";
+            cin >> userInput;
+            clearScreen();
+        }
+
+        if (cin.fail()) {
+            // If user type letter insted of number
+            // this code clear the input stream and ask the input from user again
+
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number!\n" << std::endl;
+            
+            continue;
+        }
+
+        validInput = checkInput(userInput,flag);
+
+    } while (!validInput);
+
+    return userInput;
+}
+
+// Check input funcitons
 
 bool checkInput(string inputData) {
     string lowerCaseInput = "";
 
     for (int i=0; i<inputData.size(); i++) {
-        // Chenking the string is letter or contains number and symbol
+        // Checking the string is letter or contains number and symbol
 
         if (!((inputData[i] >= 'a' && inputData[i] <= 'z') ||
             (inputData[i] >= 'A' && inputData[i] <= 'Z'))) {
 
-                // if number or symbol contsin return false and out from this function
-                cout << "\nInvalid input!\nEnter valid input provide by program discription.\n\n";
+                // if number or symbol contain return false and out from this function
+                cout << "Invalid input!\nEnter valid input provide by program discription.\n" << endl;
                 return false;
         }
 
@@ -62,7 +113,42 @@ bool checkInput(string inputData) {
     else {
         //If user enter input that is out of range from vaild and available options
         // return fasle and out from this function
-        cout << "\nPlase Enter the exect options of input provide by the program!\n\n";
+        cout << "Plase Enter the exect options of input provide by the program!\n" << endl;;
         return false;
     };
+}
+bool checkInput(int inputData, string flag) {
+
+    if (flag == "hours-flag") {
+        // If hours-flag
+        // valid input number range is between 0 and 24, both include
+        // Out of this range will ask the input from user again
+        if (inputData < 0 || inputData > 24) {
+            cout << "Please Enter valid 24-HOURS format\n" << endl;
+            return false;
+        }
+    }
+    else if (flag == "minutes-flag") {
+        // If minutes-flag
+        // valid input number range is between 0 and 60, both include
+        // Out of this range will ask the input from user again
+        if (inputData < 0 || inputData > 60) {
+            cout << "Please Enter valid 60-MINUTES format\n" << endl;
+            return false;
+        }
+    } 
+    return true;
+}
+
+void clearScreen()
+{
+    // For clear visual and best user experience
+    // clear the terminal screen base on the OS
+    #if defined _WIN32
+        system("cls");
+    #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+        system("clear");
+    #elif defined (__APPLE__)
+        system("clear");
+    #endif
 }
