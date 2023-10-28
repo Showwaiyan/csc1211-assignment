@@ -15,13 +15,33 @@ double calculateCharges(int hours,int minutes);
 double roundToOneDecimal(double num); // Rounded the minutes result to one decimal
 double combineHoursAndMinutes(int hours,int minutes); // Change minutes to decimal form and add to hours
 
+
+struct linkList {
+    double time;
+    double charges;
+    linkList * next;
+};
+linkList * createNode(double time,double charges) {
+    linkList * temp = new linkList;
+    temp->time = time;
+    temp->charges = charges;
+    temp->next = NULL;
+
+    return temp;
+}
+linkList * insertNode(linkList * current,double time, double charges) {
+    linkList * temp = createNode(time,charges);
+    current->next = temp;
+    
+    return temp;
+}
+
+
 void clearScreen(); // Clear the Terminal or Command Prompt;
 
 int main() {
     clearScreen();
-    int hours = acceptInput("hours-flag");
-    int minutes = acceptInput("minutes-flag");
-    cout << calculateCharges(hours, minutes) << endl;
+
     return 0;
 }
 
@@ -161,6 +181,8 @@ double combineHoursAndMinutes(int hours,int minutes) {
 
     return (double) hours + roundToOneDecimal(minutes/60.00);
 }
+
+//Screen clear function
 
 void clearScreen()
 {
