@@ -32,16 +32,56 @@ linkList * createNode(double time,double charges) {
 linkList * insertNode(linkList * current,double time, double charges) {
     linkList * temp = createNode(time,charges);
     current->next = temp;
-    
+
     return temp;
 }
 
+void printRecord(linkList * head); // priting the records or parking cars
 
 void clearScreen(); // Clear the Terminal or Command Prompt;
 
 int main() {
     clearScreen();
 
+    // Linked list node intiliazation
+    linkList * head = NULL; // First node
+    linkList * current = new linkList; // current node to point
+
+    // Gobal variable content
+    int hours, minutes;
+    string userInput;
+
+    bool programEnd = false; // flag to determine the program end execuation
+
+    while (!programEnd) {
+        hours = acceptInput("hours-flag");
+        minutes = acceptInput("minutes-flag");
+
+        if (head == NULL) {
+            head = createNode(combineHoursAndMinutes(hours,minutes), calculateCharges(hours, minutes));
+            current = head;
+        }
+        else {
+            current = insertNode(current, combineHoursAndMinutes(hours,minutes), calculateCharges(hours, minutes));
+        }
+
+        // Decision for showing records 
+        cout << "Type 'Yes' for to see data records, Otherwise 'No'" << endl;
+        userInput = acceptInput();
+        if (tolower(userInput[0]) == 'y') printRecord(head);
+
+        // Decision to suspence the record so that user can view the report before clearing screen
+        cout << "Type 'Yee' for to continue, Otherwise 'No' to exit program" << endl;
+        userInput = acceptInput();
+        if (tolower(userInput[0]) == 'n') break;
+
+        // Decision for inserting data records
+        cout << "Type 'Yes' to insert next data record, Otherwise 'No'" << endl;
+        userInput = acceptInput();
+        if (tolower(userInput[0]) == 'y') continue;
+        else if (tolower(userInput[0]) == 'n') break;
+    }
+    printRecord(head);
     return 0;
 }
 
@@ -182,7 +222,21 @@ double combineHoursAndMinutes(int hours,int minutes) {
     return (double) hours + roundToOneDecimal(minutes/60.00);
 }
 
-//Screen clear function
+
+// Print records funciton
+
+void printRecord(linkList * head) {
+    linkList * ptr = head;
+
+    while (ptr->next != NULL) {
+        // looping to the last element, which next element is null
+        // becuase there is no more linked list to reference
+        cout << "time: " << ptr->time << ", " << "charges: " << ptr->charges << endl;
+        ptr = ptr->next;
+    }
+}
+
+// Screen clear function
 
 void clearScreen()
 {
