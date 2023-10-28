@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <limits>
+#include <limits> // to clear the whole cin input stream if input is not valid
 
 using namespace std;
 
@@ -11,14 +11,17 @@ int acceptInput(string flag); // Accept int number input from user
 bool checkInput(string inputData); // Check string is valid or not
 bool checkInput(int inputData, string flag); // Check int is valid or not base on criteria flag
 
+double calculateCharges(int hours,int minutes);
+double roundToOneDecimal(double num); // Rounded the minutes result to one decimal
+double combineHoursAndMinutes(int hours,int minutes); // Change minutes to decimal form and add to hours
+
 void clearScreen(); // Clear the Terminal or Command Prompt;
 
 int main() {
-    Clear();
-    cout << "Enter hours";
-    acceptInput("hours-flag");
-    cout << "Enter miniutes";
-    acceptInput("minutes-flag");
+    clearScreen();
+    int hours = acceptInput("hours-flag");
+    int minutes = acceptInput("minutes-flag");
+    cout << calculateCharges(hours, minutes) << endl;
     return 0;
 }
 
@@ -138,6 +141,25 @@ bool checkInput(int inputData, string flag) {
         }
     } 
     return true;
+}
+
+// Charges calculation functions
+
+double calculateCharges(int hours, int minutes) {
+    double hoursMinutes = combineHoursAndMinutes(hours,minutes); // decimal form of hours and minutes
+
+    if (hoursMinutes <= 3.0) return 4.00;
+    else if (hoursMinutes >= 3.0 && hoursMinutes < 15.00) return ((hoursMinutes - 3)*0.5)+4.00;
+    else return 10.00;
+}
+double roundToOneDecimal(double num) {
+    return ((double)((int)(num*10+0.5))/10);
+}
+double combineHoursAndMinutes(int hours,int minutes) {
+    //Minutes is divided by 60 and change into decimal form and added to hours
+    //and that make only signle hours value
+
+    return (double) hours + roundToOneDecimal(minutes/60.00);
 }
 
 void clearScreen()
