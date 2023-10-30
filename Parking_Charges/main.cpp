@@ -2,6 +2,7 @@
 #include <string>
 #include <cmath>
 #include <limits> // to clear the whole cin input stream if input is not valid
+#include <iomanip> // For tubular form data
 
 using namespace std;
 
@@ -16,27 +17,27 @@ double roundToOneDecimal(double num); // Rounded the minutes result to one decim
 double combineHoursAndMinutes(int hours,int minutes); // Change minutes to decimal form and add to hours
 
 
-struct linkList {
+struct linkedList {
     double time;
     double charges;
-    linkList * next;
+    linkedList * next;
 };
-linkList * createNode(double time,double charges) {
-    linkList * temp = new linkList;
+linkedList * createNode(double time,double charges) {
+    linkedList * temp = new linkedList;
     temp->time = time;
     temp->charges = charges;
     temp->next = NULL;
 
     return temp;
 }
-linkList * insertNode(linkList * current,double time, double charges) {
-    linkList * temp = createNode(time,charges);
+linkedList * insertNode(linkedList * current,double time, double charges) {
+    linkedList * temp = createNode(time,charges);
     current->next = temp;
 
     return temp;
 }
 
-void printRecord(linkList * head); // priting the records or parking cars
+void printRecord(linkedList * head); // priting the records or parking cars
 
 void clearScreen(); // Clear the Terminal or Command Prompt;
 
@@ -44,16 +45,14 @@ int main() {
     clearScreen();
 
     // Linked list node intiliazation
-    linkList * head = NULL; // First node
-    linkList * current = new linkList; // current node to point
+    linkedList * head = NULL; // First node
+    linkedList * current = new linkedList; // current node to point
 
     // Gobal variable content
     int hours, minutes;
     string userInput;
 
-    bool programEnd = false; // flag to determine the program end execuation
-
-    while (!programEnd) {
+    while (true) {
         hours = acceptInput("hours-flag");
         minutes = acceptInput("minutes-flag");
 
@@ -69,9 +68,10 @@ int main() {
         cout << "Type 'Yes' for to see data records, Otherwise 'No'" << endl;
         userInput = acceptInput();
         if (tolower(userInput[0]) == 'y') printRecord(head);
+        cout << "\n";
 
         // Decision to suspence the record so that user can view the report before clearing screen
-        cout << "Type 'Yee' for to continue, Otherwise 'No' to exit program" << endl;
+        cout << "Type 'Yes' for to continue, Otherwise 'No' to exit program" << endl;
         userInput = acceptInput();
         if (tolower(userInput[0]) == 'n') break;
 
@@ -79,9 +79,11 @@ int main() {
         cout << "Type 'Yes' to insert next data record, Otherwise 'No'" << endl;
         userInput = acceptInput();
         if (tolower(userInput[0]) == 'y') continue;
-        else if (tolower(userInput[0]) == 'n') break;
+        else {
+            printRecord(head);
+            break;
+        }
     }
-    printRecord(head);
     return 0;
 }
 
@@ -225,14 +227,31 @@ double combineHoursAndMinutes(int hours,int minutes) {
 
 // Print records funciton
 
-void printRecord(linkList * head) {
-    linkList * ptr = head;
+void printRecord(linkedList * head) {
+    linkedList * ptr = head;
 
+    const int width = 20;
+
+    int count = 1;
+
+    // Printing header
+    cout << setw(width) << left << "Car"
+        << setw(width) << left << "Time"
+        << setw(width) << left << "Charges\n" << endl;
+
+    // Printing first record
+    cout << setw(width) << left << count++
+        << setw(width) << left << head->time
+        << setw(width) << left << head->charges << endl;
+
+    // Printing rest of the data
     while (ptr->next != NULL) {
-        // looping to the last element, which next element is null
+       // looping to the last element, which next element is null
         // becuase there is no more linked list to reference
-        cout << "time: " << ptr->time << ", " << "charges: " << ptr->charges << endl;
         ptr = ptr->next;
+        cout << setw(width) << left << count++
+            << setw(width) << left << ptr->time
+            << setw(width) << left << ptr->charges << endl; 
     }
 }
 
