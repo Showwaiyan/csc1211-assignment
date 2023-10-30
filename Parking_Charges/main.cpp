@@ -73,7 +73,10 @@ int main() {
         // Decision to suspence the record so that user can view the report before clearing screen
         cout << "Type 'Yes' for to continue, Otherwise 'No' to exit program" << endl;
         userInput = acceptInput();
-        if (tolower(userInput[0]) == 'n') break;
+        if (tolower(userInput[0]) == 'n') {
+            printRecord(head);
+            break;
+        }
 
         // Decision for inserting data records
         cout << "Type 'Yes' to insert next data record, Otherwise 'No'" << endl;
