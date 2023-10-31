@@ -10,7 +10,7 @@ string acceptInput(); //Accept string input from user
 int acceptInput(string flag); // Accept int number input from user
 
 bool checkInput(string inputData); // Check string is valid or not
-bool checkInput(double inputData, string flag); // Check int is valid or not base on criteria flag
+bool checkInput(string inputData, string flag); // Check int is valid or not base on criteria flag
 
 double calculateCharges(int hours,int minutes);
 double roundToOneDecimal(double num); // Rounded the minutes result to one decimal
@@ -110,7 +110,7 @@ string acceptInput() {
 }
 int acceptInput(string flag) {
     bool validInput = false;
-    double userInput;
+    string userInput;
 
     cout << "Enter Parking duration in format of Hours and minutes\n" << endl;
 
@@ -125,29 +125,20 @@ int acceptInput(string flag) {
         if (flag == "hours-flag") {
             cout << "Enter parking hours: ";
             cin >> userInput;
-            clearScreen();
+            
+            validInput = checkInput(userInput,flag);
         }
         else if (flag == "minutes-flag") {
             cout << "Enter parking minutes: ";
-            cin >> userInput;
-            clearScreen();
-        }
-
-        if (cin.fail()) {
-            // If user type letter insted of number
-            // this code clear the input stream and ask the input from user again
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input. Please enter a number!\n" << std::endl;
+            cin >> userInput; 
             
-            continue;
+            validInput = checkInput(userInput,flag);
         }
-
-        validInput = checkInput(userInput,flag);
 
     } while (!validInput);
+    clearScreen();
 
-    return userInput;
+    return stoi(userInput);
 }
 
 // Check input funcitons
@@ -184,18 +175,32 @@ bool checkInput(string inputData) {
         return false;
     };
 }
-bool checkInput(double inputData, string flag) {
-
-    if (floor(inputData) != ceil(inputData)) {
-        cout << "Please enter only Integar Number!\n" << endl;
+bool checkInput(string inputData, string flag) {
+    if (inputData.size() > 2) 
+    {
+        // Checking there is invlaid pattern of input
+        // because only two number of input is entered for hours and minutes
+        // if input length is longer than two, this is absolutely invalid
+        clearScreen();
+        cout << "Invalid Input detected! Please Enter the Valid Input.\n" << endl;
         return false;
+    }
+
+    for (int i=0;i<inputData.size();i++) {
+        // Checking there is any letter or special symbol included or not
+        if (!(inputData[i]>='0' && inputData[i]<='9')) {
+            clearScreen();
+            cout << "Please enter only Integar Number!\n" << endl;
+            return false;
+        }
     }
 
     if (flag == "hours-flag") {
         // If hours-flag
         // valid input number range is between 0 and 24, both include
         // Out of this range will ask the input from user again
-        if (inputData < 0 || inputData > 24) {
+        if (stoi(inputData) < 0 || stoi(inputData) > 24) {
+            clearScreen();
             cout << "Please Enter valid 24-HOURS format\n" << endl;
             return false;
         }
@@ -204,7 +209,8 @@ bool checkInput(double inputData, string flag) {
         // If minutes-flag
         // valid input number range is between 0 and 60, both include
         // Out of this range will ask the input from user again
-        if (inputData < 0 || inputData > 60) {
+        if (stoi(inputData) < 0 || stoi(inputData) > 60) {
+            clearScreen();
             cout << "Please Enter valid 60-MINUTES format\n" << endl;
             return false;
         }
@@ -240,16 +246,20 @@ void printRecord(linkedList * head) {
     const int width = 20;
 
     int count = 1;
+    double totalHour = 0.0;
+    double totalChrages = 0.0;
 
     // Printing header
     cout << setw(width) << left << "Car"
-        << setw(width) << left << "Time"
+        << setw(width) << left << "Time(Hours)"
         << setw(width) << left << "Charges\n" << endl;
 
     // Printing first record
     cout << setw(width) << left << count++
         << setw(width) << left << head->time
         << setw(width) << left << head->charges << endl;
+    totalHour += head->time;
+    totalChrages += head->charges;
 
     // Printing rest of the data
     while (ptr->next != NULL) {
@@ -259,7 +269,13 @@ void printRecord(linkedList * head) {
         cout << setw(width) << left << count++
             << setw(width) << left << ptr->time
             << setw(width) << left << ptr->charges << endl; 
+        totalHour += ptr->time;
+        totalChrages += ptr->charges;
     }
+    cout << "\n";
+    cout << setw(width) << left << "Total"
+        << setw(width) << left << totalHour
+        << setw(width) << left << totalChrages << endl;
 }
 
 // Screen clear function
