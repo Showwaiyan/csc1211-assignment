@@ -10,7 +10,7 @@ string acceptInput(); //Accept string input from user
 int acceptInput(string flag); // Accept int number input from user
 
 bool checkInput(string inputData); // Check string is valid or not
-bool checkInput(int inputData, string flag); // Check int is valid or not base on criteria flag
+bool checkInput(double inputData, string flag); // Check int is valid or not base on criteria flag
 
 double calculateCharges(int hours,int minutes);
 double roundToOneDecimal(double num); // Rounded the minutes result to one decimal
@@ -110,7 +110,7 @@ string acceptInput() {
 }
 int acceptInput(string flag) {
     bool validInput = false;
-    int userInput;
+    double userInput;
 
     cout << "Enter Parking duration in format of Hours and minutes\n" << endl;
 
@@ -136,7 +136,6 @@ int acceptInput(string flag) {
         if (cin.fail()) {
             // If user type letter insted of number
             // this code clear the input stream and ask the input from user again
-
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Invalid input. Please enter a number!\n" << std::endl;
@@ -185,7 +184,12 @@ bool checkInput(string inputData) {
         return false;
     };
 }
-bool checkInput(int inputData, string flag) {
+bool checkInput(double inputData, string flag) {
+
+    if (floor(inputData) != ceil(inputData)) {
+        cout << "Please enter only Integar Number!\n" << endl;
+        return false;
+    }
 
     if (flag == "hours-flag") {
         // If hours-flag
