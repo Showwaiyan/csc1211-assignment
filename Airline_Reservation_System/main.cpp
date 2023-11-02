@@ -23,40 +23,93 @@ int main() {
     string arrival;
     cout << "Enter the arrival port: ";
     getline(cin, arrival);
+    cout << "\n";
 
-    // const int NUMBER_OF_ELEMENTS = 16;
-    // bool seats[NUMBER_OF_ELEMENTS];
+    const int NUMBER_OF_ELEMENTS = 16;
+    bool seats[NUMBER_OF_ELEMENTS];
 
-    // int userInput;
-    // int seatNum;
+    intilizeArray(seats, NUMBER_OF_ELEMENTS);
 
-    // while (true) {
+    int userInput;
+    int seatNum;
 
-    //     userInput = acceptInput("section-chosing");
+    while (true) {
 
-    //     switch(userInput) {
-    //         case 1:
-    //             seatNum = findAvailableSeat(seats, 8, 0);
-    //             if (seatNum == -1) {
-    //                 // change section
-    //             }
+        userInput = acceptInput("section-chosing");
 
-    //             intilizeSeat(seats, seatNum);
-    //             break;
-    //         case 2:
-    //             seatNum = findAvailableSeat(seats, 8, 8);
-    //             if (seatNum == -1) {
-    //                 // change section
-    //             }
+        switch(userInput) {
+            case 1:
+                seatNum = findAvailableSeat(seats, 8, 0);
 
-    //             intilizeSeat(seats, seatNum);
-    //             break;
-    //         default:
-    //             cout << "Some error encounter!\n Please rerun the program." << endl;
-    //             break; 
-    //     }
-    // }
-    printSeat(2, 9, arrival);
+                if (seatNum == -1) {
+                    // change section
+                    clearScreen();
+                    cout << "Smoking section is full.\n\n";
+                    cout << "Would you like to change Non-smoking section?\n" << endl;
+                    userInput = acceptInput("yesORno-chosing");
+
+                    if (userInput == 2) {
+                        cout << "Thansk for using our airline.\n" << endl;
+                        cout << "Next flight in 5 hours!" << endl;
+                        return 0;
+                    }
+
+                    seatNum = findAvailableSeat(seats, 8, 8);
+                    if (seatNum == -1) {
+                        cout << "All seats are taken!\n";
+                        cout << "Next flight in 5 hours!" << endl;
+                        return 0;
+                    }
+                    else {
+                        intilizeSeat(seats, seatNum);
+                        printSeat(2, seatNum, arrival);
+                    }
+                }
+                else {
+                    intilizeSeat(seats, seatNum);
+                    printSeat(1, seatNum, arrival); 
+                    continue;
+                }
+               break;
+
+            case 2:
+                seatNum = findAvailableSeat(seats, 8, 8);
+                if (seatNum == -1) {
+                    // change section
+                    clearScreen();
+                    cout << "Non-Smoking section is full.\n\n";
+                    cout << "Would you like to change smoking section?\n" << endl;
+                    userInput = acceptInput("yesORno-chosing");
+
+                    if (userInput == 2) {
+                        cout << "Thansk for using our airline.\n" << endl;
+                        cout << "Next flight in 5 hours!" << endl;
+                        return 0;
+                    }
+
+                    seatNum = findAvailableSeat(seats, 8, 0);
+                    if (seatNum == -1) {
+                        cout << "All seats are taken!\n";
+                        cout << "Next flight in 5 hours!" << endl;
+                        return 0;
+                    }
+                    else {
+                        intilizeSeat(seats, seatNum);
+                        printSeat(1, seatNum, arrival);
+                        continue;
+                    }
+                }
+                else {
+                    intilizeSeat(seats, seatNum);
+                    printSeat(2, seatNum, arrival); 
+                }
+                break;
+
+            default:
+                cout << "Some error encounter!\n Please rerun the program." << endl;
+                break; 
+        }
+    }
     return 0;
 }
 
@@ -66,19 +119,24 @@ int acceptInput(string flag) {
 
     do {
         if (flag == "section-chosing") {
-            cout << "Enter your dedicated airplane seciont seat.\n";
+            cout << "Enter your dedicated airplane section seat.\n\n";
             cout << "Type '1' for Smoking section :\n";
-            cout << "Type '2' for Non-smoking section :\n";
+            cout << "Type '2' for Non-smoking section :\n\n";
             cout << "Enter here: ";
             cin >> userInput;
-
-            clearScreen();
+            cout << "\n";
 
             validInput = checkInput(userInput, flag);
 
         }
         else if (flag == "yesORno-chosing") {
+            cout << "Type '1' for Yes,\n";
+            cout << "Type '2' for No.\n" << endl;
+            cout << "Enter here: ";
+            cin >> userInput;
+            cout << "\n";
 
+            validInput = checkInput(userInput, flag);
         }
         else {
             cout << "Inavlid Flag!" << endl;
@@ -97,11 +155,13 @@ bool checkInput(string inputData, string flag) {
             // Valid input should be only one character
             // which is '1' and '2'
             // Otherwise, invalid input
+            cout << "\n***********************************************************************" << endl;
             cout << "Please enter appropriate input that is descripted by program!\n" << endl;
             return false;
         }
         else if (inputData == "1" || inputData == "2") return true;
         else {
+            cout << "\n***********************************************************************" << endl;
             cout << "Please enter only valid value options provided by the program\n" << endl;
             return false;
         }
@@ -116,7 +176,7 @@ void intilizeArray(bool (&arr)[], int size) {
     }
 }
 int findAvailableSeat(bool arr[], int size, int start) {
-    for (int i=start; i<size; i++) {
+    for (int i=start; i<size+start; i++) {
         if (arr[i] == 0) return i;
     }
     return -1;
@@ -129,7 +189,9 @@ void printSeat(int section, int seatNum, string arrival) {
     time_t now = time(0);
     char* dt = ctime(&now);
 
+    cout << "\n*****************************************************************" << endl;
     switch (section) {
+
         case 1:
             // Date Time
             cout << setw(30) << left << "Register Date/Time";
@@ -139,7 +201,7 @@ void printSeat(int section, int seatNum, string arrival) {
             // Section Seat
             cout << setw(50) << left << dt;
             cout << setw(1) << " ";
-            cout << setw(29) << right << "Seat No.: " << seatNum << endl;
+            cout << setw(29) << right << "Seat No.: " << seatNum+1 << endl;
 
             // Dep Arrive
             cout << setw(15) << left << "Dep:";
@@ -148,7 +210,7 @@ void printSeat(int section, int seatNum, string arrival) {
 
             cout << setw(15) << left << "Kuala Lumpur";
             cout << setw(1) << " ";
-            cout << setw(15) << left << arrival << endl;
+            cout << setw(15) << left << arrival << "\n" << endl;
             
             break;      
 
@@ -170,10 +232,11 @@ void printSeat(int section, int seatNum, string arrival) {
 
             cout << setw(15) << left << "Kuala Lumpur";
             cout << setw(1) << " ";
-            cout << setw(15) << left << arrival << endl;
+            cout << setw(15) << left << arrival << "\n" <<endl;
 
             break;
     }
+    cout << "*****************************************************************\n" << endl;
 }
 
 void clearScreen()
