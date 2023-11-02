@@ -6,16 +6,18 @@ using namespace std;
 int acceptInput(string flag); // accepting user input
 bool checkInput(string inputData, string flag); // viladation checking for user input
 
-void intilizeArray(bool (&arr)[2][8], int row, int column);
-int findAvailableSeat(bool arr[8], int size); // find non-taking seat
+void intilizeArray(bool (&arr)[], int size);
+int findAvailableSeat(bool arr[], int size, int start); // find non-taking seat
 
 
 void clearScreen(); // Clear terminal or comand prompt 
 
 int main() {
-    const int NUMBER_OF_SECTION = 2;
-    const int NUMBER_OF_SETAS_PER_SECTION = 8;
-    bool seats[NUMBER_OF_SECTION][NUMBER_OF_SETAS_PER_SECTION];
+    const int NUMBER_OF_ELEMENTS = 16;
+    bool seats[NUMBER_OF_ELEMENTS];
+
+    intilizeArray(seats, NUMBER_OF_ELEMENTS);
+    cout << findAvailableSeat(seats, NUMBER_OF_ELEMENTS, 0) << endl;
 
     return 0;
 }
@@ -69,19 +71,17 @@ bool checkInput(string inputData, string flag) {
     return true;
 }
 
-void intilizeArray(bool (&arr)[2][8], int row, int column) {
+void intilizeArray(bool (&arr)[], int size) {
     //intialization all element to zero
-    for (int i=0; i < row; i++) {
-        for (int j=0; j < column; j++) {
-            arr[i][j] = 0;
-        }
+    for (int i=0; i < size; i++) {
+        arr[i] = 0;
     }
 }
-int findAvailableSeat(bool arr[8], int size) {
-    for (int i=0; i<size; i++) {
+int findAvailableSeat(bool arr[], int size, int start) {
+    for (int i=start; i<size; i++) {
         if (arr[i] == 0) return i;
     }
-    return -1
+    return -1;
 }
 
 void clearScreen()
