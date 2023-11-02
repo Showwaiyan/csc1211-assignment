@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <ctime>
 
 using namespace std;
 
@@ -8,17 +10,53 @@ bool checkInput(string inputData, string flag); // viladation checking for user 
 
 void intilizeArray(bool (&arr)[], int size);
 int findAvailableSeat(bool arr[], int size, int start); // find non-taking seat
+void intilizeSeat(bool (&arr)[],int index); // Take seats in the array
+
+void printSeat(int section, int seatNum, string arrival);
 
 
 void clearScreen(); // Clear terminal or comand prompt 
 
 int main() {
-    const int NUMBER_OF_ELEMENTS = 16;
-    bool seats[NUMBER_OF_ELEMENTS];
+    clearScreen();
 
-    intilizeArray(seats, NUMBER_OF_ELEMENTS);
-    cout << findAvailableSeat(seats, NUMBER_OF_ELEMENTS, 0) << endl;
+    string arrival;
+    cout << "Enter the arrival port: ";
+    getline(cin, arrival);
 
+    // const int NUMBER_OF_ELEMENTS = 16;
+    // bool seats[NUMBER_OF_ELEMENTS];
+
+    // int userInput;
+    // int seatNum;
+
+    // while (true) {
+
+    //     userInput = acceptInput("section-chosing");
+
+    //     switch(userInput) {
+    //         case 1:
+    //             seatNum = findAvailableSeat(seats, 8, 0);
+    //             if (seatNum == -1) {
+    //                 // change section
+    //             }
+
+    //             intilizeSeat(seats, seatNum);
+    //             break;
+    //         case 2:
+    //             seatNum = findAvailableSeat(seats, 8, 8);
+    //             if (seatNum == -1) {
+    //                 // change section
+    //             }
+
+    //             intilizeSeat(seats, seatNum);
+    //             break;
+    //         default:
+    //             cout << "Some error encounter!\n Please rerun the program." << endl;
+    //             break; 
+    //     }
+    // }
+    printSeat(2, 9, arrival);
     return 0;
 }
 
@@ -82,6 +120,60 @@ int findAvailableSeat(bool arr[], int size, int start) {
         if (arr[i] == 0) return i;
     }
     return -1;
+}
+void intilizeSeat(bool (&arr)[], int index) {
+    arr[index] = 1;
+}
+
+void printSeat(int section, int seatNum, string arrival) {
+    time_t now = time(0);
+    char* dt = ctime(&now);
+
+    switch (section) {
+        case 1:
+            // Date Time
+            cout << setw(30) << left << "Register Date/Time";
+            cout << setw(1) << " ";
+            cout << setw(30) << right << "Section: Smoking" << endl;
+
+            // Section Seat
+            cout << setw(50) << left << dt;
+            cout << setw(1) << " ";
+            cout << setw(29) << right << "Seat No.: " << seatNum << endl;
+
+            // Dep Arrive
+            cout << setw(15) << left << "Dep:";
+            cout << setw(1) << " ";
+            cout << setw(15) << left  << "Arival:" << endl;
+
+            cout << setw(15) << left << "Kuala Lumpur";
+            cout << setw(1) << " ";
+            cout << setw(15) << left << arrival << endl;
+            
+            break;      
+
+        case 2:
+            // Date Time
+            cout << setw(30) << left << "Register Date/Time";
+            cout << setw(1) << " ";
+            cout << setw(30) << right << "Section: Non-Smoking" << endl;
+
+            // Section Seat
+            cout << setw(50) << left << dt;
+            cout << setw(1) << " ";
+            cout << setw(25) << right << "Seat No.: " << seatNum-7 << endl;
+
+            // Dep Arrive 
+            cout << setw(15) << left << "Dep:";
+            cout << setw(1) << " ";
+            cout << setw(15) << left  << "Arival:" << endl;
+
+            cout << setw(15) << left << "Kuala Lumpur";
+            cout << setw(1) << " ";
+            cout << setw(15) << left << arrival << endl;
+
+            break;
+    }
 }
 
 void clearScreen()
