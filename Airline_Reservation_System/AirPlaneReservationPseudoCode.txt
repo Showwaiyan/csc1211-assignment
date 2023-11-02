@@ -1,0 +1,178 @@
+#Accept Input Function
+function acceptInput(flag) {
+    string userInput
+    bool validInput = false
+
+    do {
+        if flag == "section-chosing" {
+            print("Choose your dedicated airplane section:\n")
+            print("1. Smoking section\n")
+            print("2. Non-smoking section\n")
+            print("Enter your choice: ")
+            userInput = getUserInput()
+            print("\n")
+
+            validInput = checkSectionChoice(userInput)
+        }
+        else if flag == "yesORno-chosing" {
+            print("Please select one:\n")
+            print("1. Yes\n")
+            print("2. No\n")
+            print("Enter your choice: ")
+            userInput = getUserInput()
+            print("\n")
+
+            validInput = checkYesOrNoChoice(userInput)
+        }
+        else {
+            print("Invalid Flag!\n")
+            return 0
+        }
+
+    } while !validInput
+
+    return convertToNumeric(userInput)
+}
+
+#Checking Input
+function validateInput(inputData, flag) {
+    if flag is "section-chosing" or flag is "yesORno-chosing":
+        if length(inputData) is not 1:
+            print("Please enter a single character as specified.\n")
+            return false
+        else if inputData is not "1" and inputData is not "2":
+            print("Please enter a valid option provided by the program.\n")
+            return false
+    return true
+}
+
+#array
+function initializeArray(arr, size) {
+    for i from 0 to size - 1 {
+        arr[i] = false
+    }
+}
+
+#Function Availableseat
+function findAvailableSeat(arr, size, start) {
+    for i from start to start + size - 1 {
+        if arr[i] is false {
+            return i
+        }
+    }
+    return -1
+}
+
+#function initializeSeat
+function initializeSeat(arr, index) {
+    arr[index] = true
+}
+
+#PrintSeat Function
+function printSeat(section, seatNum, arrival) {
+    currentDateTime = getCurrentDateTime()
+    
+    print("*********************************************\n")
+
+    switch section {
+        case 1:
+            print("Register Date/Time: " + currentDateTime + "\n")
+            print("Section: Smoking\n")
+            print("Seat No.: " + (seatNum + 1) + "\n")
+            print("Dep: Kuala Lumpur\n")
+            print("Arrival: " + arrival + "\n")
+        case 2:
+            print("Register Date/Time: " + currentDateTime + "\n")
+            print("Section: Non-Smoking\n")
+            print("Seat No.: " + (seatNum - 7) + "\n")
+            print("Dep: Kuala Lumpur\n")
+            print("Arrival: " + arrival + "\n")
+    }
+
+    print("*********************************************\n")
+}
+
+#ClearScreen
+function clearScreen() {
+    if currentOperatingSystem is Windows {
+        executeSystemCommand("cls")
+    } else if currentOperatingSystem is Linux {
+        executeSystemCommand("clear")
+    } else if currentOperatingSystem is macOS {
+        executeSystemCommand("clear")
+    }
+}
+
+#MainFunction
+function main() {
+    clearScreen()
+
+    // Ask the user for the arrival port
+    arrival = getInput("arrival port")
+
+    // Initialize an array to represent available seats
+    const NUMBER_OF_ELEMENTS = 16
+    bool seats[NUMBER_OF_ELEMENTS]
+    initializeArray(seats, NUMBER_OF_ELEMENTS)
+
+    while true {
+        // Ask the user to choose a section (Smoking or Non-Smoking)
+        sectionChoice = getUserSectionChoice()
+
+        // Try to find an available seat in the chosen section
+        seatNum = findAvailableSeat(seats, sectionChoice)
+
+        if seatNum is -1 {
+            // If the section is full, prompt the user to change section or exit
+            clearScreen()
+
+            if sectionChoice is Smoking {
+                print("Smoking section is full.\n")
+                changeSectionChoice = getUserChangeSectionChoice()
+
+                if changeSectionChoice is No {
+                    print("Thanks for using our airline.\n")
+                    print("Next flight in 5 hours!\n")
+                    return 0
+                }
+
+                // Try to find an available seat in the Non-Smoking section
+                seatNum = findAvailableSeat(seats, Non-Smoking)
+                if seatNum is -1 {
+                    print("All seats are taken!\n")
+                    print("Next flight in 5 hours!\n")
+                    return 0
+                } else {
+                    initializeSeat(seats, seatNum)
+                    printSeat(Non-Smoking, seatNum, arrival)
+                }
+            } else if sectionChoice is Non-Smoking {
+                print("Non-Smoking section is full.\n")
+                changeSectionChoice = getUserChangeSectionChoice()
+
+                if changeSectionChoice is No {
+                    print("Thanks for using our airline.\n")
+                    print("Next flight in 5 hours!\n")
+                    return 0
+                }
+
+                // Try to find an available seat in the Smoking section
+                seatNum = findAvailableSeat(seats, Smoking)
+                if seatNum is -1 {
+                    print("All seats are taken!\n")
+                    print("Next flight in 5 hours!\n")
+                    return 0
+                } else {
+                    initializeSeat(seats, seatNum)
+                    printSeat(Smoking, seatNum, arrival)
+                }
+            }
+        } else {
+            // An available seat is found, reserve it and print the seat details
+            initializeSeat(seats, seatNum)
+            printSeat(sectionChoice, seatNum, arrival)
+        }
+    }
+}
+
+
