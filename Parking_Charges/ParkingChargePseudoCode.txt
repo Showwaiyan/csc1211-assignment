@@ -125,3 +125,38 @@ Function clearScreen():
     Else, if the operating system is a Linux-based system or macOS:
         Execute the system command "clear" to clear the screen.
 
+#Main function
+function main() {
+    clearScreen()  // Clear the screen for a clean interface
+    initializeParkingRecords()  // Initialize a data structure for parking records
+
+    while true {  // Enter an infinite loop
+        hours = acceptHoursInput()  // Ask the user for parking hours
+        minutes = acceptMinutesInput()  // Ask the user for parking minutes
+
+        record = createParkingRecord(hours, minutes)  // Create a new parking record
+        addRecordToDataStructure(record)  // Add the record to the data structure
+
+        displayRecordsOption = askUserToViewRecords()  // Ask if the user wants to view records
+
+        if displayRecordsOption == "Yes" {
+            displayParkingRecords()  // Display the parking records
+        }
+
+        continueOrExitOption = askUserToContinueOrExit()  // Ask if the user wants to continue or exit
+
+        if continueOrExitOption == "Exit" {
+            displayParkingRecords()  // Display the parking records
+            break  // Exit the program
+        }
+
+        insertNewRecordOption = askUserToInsertNewRecord()  // Ask if the user wants to insert a new record
+
+        if insertNewRecordOption == "No" {
+            displayParkingRecords()  // Display the parking records
+            break  // Exit the program
+        }
+    }
+
+    exitProgram()  // End the program
+}
