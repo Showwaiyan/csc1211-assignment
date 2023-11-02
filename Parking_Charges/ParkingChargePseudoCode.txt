@@ -1,0 +1,127 @@
+#String AcceptInput Function
+Function acceptInput():
+    Set validInput to false.
+    Initialize userInput as an empty string.
+
+    Repeat the following loop:
+        Print a prompt for the user to enter 'Yes' or 'No'.
+        Read the user's input and store it in userInput.
+        Clear the screen (for better user experience).
+
+        Check if userInput is valid using the checkInput function.
+
+    Until validInput is true.
+
+    Return userInput.
+
+#Integer AcceptInput Function
+Function acceptInput(flag):
+    Set validInput to false.
+    Initialize userInput as an empty string.
+
+    Print information about the expected input format for hours and minutes.
+
+    Repeat the following loop:
+        If flag is "hours-flag", print a prompt for the user to enter parking hours.
+        If flag is "minutes-flag", print a prompt for the user to enter parking minutes.
+        
+        Read the user's input as a string and store it in userInput.
+
+        Check if userInput is valid for the specified flag using the checkInput function.
+    Until validInput is true.
+
+    Clear the screen (for better user experience).
+
+    Convert userInput to an integer using stoi.
+
+    Return the integer value.
+
+#String CheckInput Function
+Function checkInput(inputData):
+    Initialize lowerCaseInput as an empty string.
+    
+    For each character in inputData:
+        If the character is not a letter (A-Z or a-z):
+            Print an error message indicating invalid input.
+            Return false to indicate invalid input.
+        Append the lowercase version of the character to lowerCaseInput.
+
+    If lowerCaseInput is equal to "y" or "n" or "yes" or "no":
+        Return true to indicate valid input.
+    Else:
+        Print an error message indicating that the input is not within the valid options.
+        Return false to indicate invalid input.
+
+#Integer CheckInput Function
+Function checkInput(inputData, flag):
+    If the length of inputData is greater than 2:
+        Print an error message indicating that the input pattern is invalid.
+        Return false to indicate invalid input.
+
+    For each character in inputData:
+        If the character is not a digit (0-9):
+            Print an error message indicating that only integer numbers are allowed.
+            Return false to indicate invalid input.
+
+    If flag is "hours-flag":
+        If inputData converted to an integer is less than 0 or greater than 24:
+            Print an error message indicating the input is outside the valid range (0-24).
+            Return false to indicate invalid input.
+    Else if flag is "minutes-flag":
+        If inputData converted to an integer is less than 0 or greater than 60:
+            Print an error message indicating the input is outside the valid range (0-60).
+            Return false to indicate invalid input.
+
+    Return true to indicate valid input.
+
+#Function Calucalte Parking Charges
+Function calculateCharges(hours, minutes):
+    hoursMinutes = combineHoursAndMinutes(hours, minutes)  // Convert hours and minutes to a single decimal value.
+
+    If hoursMinutes <= 3.0:
+        Return a fixed charge of 4.00.
+    Else if 3.0 < hoursMinutes < 15.0:
+        Return ((hoursMinutes - 3) * 0.5) + 4.00.
+    Else:
+        Return a fixed charge of 10.00.
+
+Function roundToOneDecimal(num):
+    // Round a floating-point number to one decimal place
+    Return round(num, 1)
+
+Function combineHoursAndMinutes(hours, minutes):
+    // Convert hours and minutes to a single decimal value
+    Return hours + roundToOneDecimal(minutes / 60.0)
+
+#Function Printing Record
+Function printRecord(head):
+    Initialize ptr as the head of the linked list.
+    Define a constant width for formatting.
+
+    Initialize count, totalHour, and totalCharges to zero.
+
+    Print a header for the parking records, including car number, time in hours, and charges.
+    Print a newline for better formatting.
+
+    // Printing the first record
+    Print car number, time, and charges for the head node.
+    Update count, totalHour, and totalCharges with values from the head node.
+
+    While ptr's next node is not null:
+        // Loop through the linked list until the last element
+        ptr = ptr's next node.
+
+        Print car number, time, and charges for the current node.
+        Update count, totalHour, and totalCharges with values from the current node.
+
+    Print a newline for better formatting.
+    Print the total parking hours and total charges.
+
+#Clear Screen
+Function clearScreen():
+    // Clear the terminal screen for a better user experience
+    If the operating system is Windows (identified by the _WIN32 macro):
+        Execute the system command "cls" to clear the screen.
+    Else, if the operating system is a Linux-based system or macOS:
+        Execute the system command "clear" to clear the screen.
+
