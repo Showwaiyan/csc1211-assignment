@@ -145,7 +145,7 @@ int acceptInput(string flag) {
 
     } while (!validInput);
 
-    return stoi(userInput);
+    return stoi(userInput); // if valid change string to number, which is absolutely can after valiadation
 }
 
 bool checkInput(string inputData, string flag) {
@@ -186,6 +186,7 @@ void intilizeSeat(bool (&arr)[], int index) {
 }
 
 void printSeat(int section, int seatNum, string arrival) {
+    // getting current time
     time_t now = time(0);
     char* dt = ctime(&now);
 
