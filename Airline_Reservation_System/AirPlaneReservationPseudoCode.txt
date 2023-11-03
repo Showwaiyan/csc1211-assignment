@@ -40,7 +40,7 @@ function validateInput(inputData, flag) {
         if length(inputData) is not 1:
             print("Please enter a single character as specified.\n")
             return false
-        else if inputData is not "1" and inputData is not "2":
+        else if inputData is not "1" or inputData is not "2":
             print("Please enter a valid option provided by the program.\n")
             return false
     return true
