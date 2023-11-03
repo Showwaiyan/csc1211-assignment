@@ -125,6 +125,28 @@ Function clearScreen():
     Else, if the operating system is a Linux-based system or macOS:
         Execute the system command "clear" to clear the screen.
 
+#Creating Node function
+Function createNode(time, charges):
+    # Create a new node
+    temp = new Node
+    temp.time = time
+    temp.charges = charges
+    temp.next = NULL
+
+    # Return the newly created node
+    Return temp
+
+#Inserting Node function
+Function insertNode(current, time, charges):
+    # Create a new node with the provided time and charges
+    temp = createNode(time, charges)
+
+    # Set the next pointer of the current node to the new node
+    current.next = temp
+
+    # Return the newly inserted node
+    Return temp
+
 #Main function
 function main() {
     clearScreen()  // Clear the screen for a clean interface
